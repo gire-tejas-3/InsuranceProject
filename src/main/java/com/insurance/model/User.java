@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
@@ -13,12 +16,26 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer userId;
+
+	@Size(min = 4, max = 12, message = "Please enter a valid username. Username should not be less than 4 and should not be greater than 12 characters.")
 	private String username;
+
+	@Size(min = 4, message = "Please enter a valid name. Name should not be less than 4 characters.")
 	private String name;
+
+	@Size(min = 10, max = 13, message = "Please enter a valid mobile number.")
+	@Pattern(regexp = "^[0-9]{10, 13}$", message = "Mobile Number should contain only digits")
 	private String mobileNo;
+
+	@Email(message = "Please enter a valid email")
 	private String email;
+
+	@Size(min = 4, message = "Please enter a valid address. Address should not be less than 4 characters")
 	private String address;
+
+	@Pattern(regexp = "^(ADMIN|USER)$")
 	private String role;
+	
 	private boolean isActive;
 	private Integer policyId; // (FK)-MTO
 
