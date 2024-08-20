@@ -32,7 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
-### Ignore application.properties and other environment-specific properties files
-/src/main/resources/application.properties
-/src/main/resources/application.yml
-*.properties
+# Ignore all .properties files in src/main/resources/
+/src/main/resources/*.properties
+
+# Ensure other files and folders in src/main/resources/ are not ignored
+!/src/main/resources/**/
