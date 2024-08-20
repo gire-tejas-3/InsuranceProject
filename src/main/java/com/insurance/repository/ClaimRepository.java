@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import com.insurance.model.User;
+import com.insurance.model.Claim;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Serializable> {
+public interface ClaimRepository extends JpaRepository<Claim, Serializable> {
 
-	public User findById(Integer id);
+	public Claim findById(Integer id);
+
+	public void deleteById(Integer id);
 }
