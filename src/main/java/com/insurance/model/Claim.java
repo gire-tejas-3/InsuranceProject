@@ -29,6 +29,7 @@ public class Claim {
 	}
 
 	public Claim(String claimDescription, LocalDate claimDate, String claimStatus, long claimAmount) {
+		this();
 		this.claimDescription = claimDescription;
 		this.claimDate = claimDate;
 		this.claimStatus = claimStatus;
