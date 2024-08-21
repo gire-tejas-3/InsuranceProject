@@ -15,7 +15,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer userId;
+	private Integer id;
 
 	@Size(min = 4, max = 12, message = "Please enter a valid username. Username should not be less than 4 and should not be greater than 12 characters.")
 	private String username;
@@ -58,12 +58,12 @@ public class User {
 	}
 
 	// Getter Setter Methods
-	public Integer getUserId() {
-		return userId;
+	public Integer getid() {
+		return id;
 	}
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
+	public void setid(Integer id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -132,7 +132,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", username=" + username + ", name=" + name + ", mobileNo=" + mobileNo
+		return "User [id=" + id + ", username=" + username + ", name=" + name + ", mobileNo=" + mobileNo
 				+ ", email=" + email + ", address=" + address + ", role=" + role + ", isActive=" + isActive
 				+ ", policyId=" + policyId + "]";
 	}

@@ -14,7 +14,7 @@ public class Policy {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int policyId;
+	private int id;
 	private String policyNumber;
 	private String policyType;
 	private long policyPremium;
@@ -39,12 +39,12 @@ public class Policy {
 
 	// Getter Setter Methods
 
-	public int getPolicyId() {
-		return policyId;
+	public int getid() {
+		return id;
 	}
 
-	public void setPolicyId(int policyId) {
-		this.policyId = policyId;
+	public void setid(int id) {
+		this.id = id;
 	}
 
 	public String getPolicyType() {
@@ -99,7 +99,7 @@ public class Policy {
 
 	@Override
 	public String toString() {
-		return "Policy [policyId=" + policyId + ", policyType=" + policyType + ", policyPremium=" + policyPremium
+		return "Policy [id=" + id + ", policyType=" + policyType + ", policyPremium=" + policyPremium
 				+ ", policyStartDate=" + policyStartDate + ", policyEndDate=" + policyEndDate
 				+ ", policyCoverageAmount=" + policyCoverageAmount + "]";
 	}

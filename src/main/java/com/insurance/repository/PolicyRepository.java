@@ -10,5 +10,4 @@ public interface PolicyRepository extends JpaRepository<Policy, Serializable> {
 
 	public Policy findById(Integer id);
 
-	public void deleteById(int id);
 }
