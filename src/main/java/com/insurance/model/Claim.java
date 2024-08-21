@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "claim")
@@ -19,37 +18,55 @@ public class Claim {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String claimNumber;
-	@Size(min = 50, max = 150, message = "The number of characters should not be less then 50 and greater then 150.")
-	private String claimDescription;
-	@NotNull(message = "Please enter the claim date, claim date must not be null.")
+	private String description;
+
+	@NotNull
 	private LocalDate claimDate;
-	@NotNull(message = "Claim status is required.")
-	private String claimStatus;
+
+	@Pattern(regexp = "^(INPROCESS|APPROVED|REJECTED)&")
+	private String status; // Aprroved or Rejected or in process
+
 	@NotNull
 	private long claimAmount;
+
+	@NotNull
+	private int gracePeriod; // 30DAYS OR 60 DAYS
+
+	@Pattern(regexp = "^(MATURITY|DEATH)&")
+	private String category; // maturity or death
+
+	@Pattern(regexp = "^(CHEQUE|TRANSFER)&")
+	private String modeOfPayment; // cheque, digital transfer
+
+	private String medicalRecords; // medical bills, hospital bills
+
 	// private int policyId;
 
 	// Constructor
 
 	public Claim() {
-		this.claimNumber = generateClaimNumber();
+
 	}
 
-	public Claim(String claimDescription, LocalDate claimDate, String claimStatus, long claimAmount) {
-		this();
-		this.claimDescription = claimDescription;
+	public Claim(String description, LocalDate claimDate, String status, long claimAmount, int gracePeriod,
+			String category, String modeOfPayment, String medicalRecords) {
+		this.description = description;
 		this.claimDate = claimDate;
-		this.claimStatus = claimStatus;
+		this.status = status;
 		this.claimAmount = claimAmount;
+		this.gracePeriod = gracePeriod;
+		this.category = category;
+		this.modeOfPayment = modeOfPayment;
+		this.medicalRecords = medicalRecords;
 	}
 
 	// Getter Setter Method
 
-	public int getid() {
+	public int getId() {
 		return id;
 	}
 
-	public void setid(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -58,15 +75,15 @@ public class Claim {
 	}
 
 	public void setClaimNumber(String claimNumber) {
-		this.claimNumber = generateClaimNumber();
+		this.claimNumber = claimNumber;
 	}
 
-	public String getClaimDescription() {
-		return claimDescription;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setClaimDescription(String claimDescription) {
-		this.claimDescription = claimDescription;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public LocalDate getClaimDate() {
@@ -77,12 +94,12 @@ public class Claim {
 		this.claimDate = claimDate;
 	}
 
-	public String getClaimStatus() {
-		return claimStatus;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setClaimStatus(String claimStatus) {
-		this.claimStatus = claimStatus;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public long getClaimAmount() {
@@ -91,6 +108,48 @@ public class Claim {
 
 	public void setClaimAmount(long claimAmount) {
 		this.claimAmount = claimAmount;
+	}
+
+	public int getGracePeriod() {
+		return gracePeriod;
+	}
+
+	public void setGracePeriod(int gracePeriod) {
+		this.gracePeriod = gracePeriod;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getModeOfPayment() {
+		return modeOfPayment;
+	}
+
+	public void setModeOfPayment(String modeOfPayment) {
+		this.modeOfPayment = modeOfPayment;
+	}
+
+	public String getMedicalRecords() {
+		return medicalRecords;
+	}
+
+	public void setMedicalRecords(String medicalRecords) {
+		this.medicalRecords = medicalRecords;
+	}
+
+	// To String Method
+
+	@Override
+	public String toString() {
+		return "Claim [id=" + id + ", claimNumber=" + claimNumber + ", description=" + description + ", claimDate="
+				+ claimDate + ", status=" + status + ", claimAmount=" + claimAmount + ", gracePeriod=" + gracePeriod
+				+ ", category=" + category + ", modeOfPayment=" + modeOfPayment + ", medicalRecords=" + medicalRecords
+				+ "]";
 	}
 
 	// Create method for generate auto claim number

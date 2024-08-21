@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.insurance.model.Policy;
 import com.insurance.service.PolicyService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/policies")
 public class PolicyController {
@@ -23,7 +25,7 @@ public class PolicyController {
 	private PolicyService policyService;
 
 	@PostMapping
-	public ResponseEntity<Policy> createPolicy(@RequestBody Policy policy) {
+	public ResponseEntity<Policy> createPolicy(@Valid @RequestBody	Policy policy) {
 		Policy createdPolicy = policyService.createPolicy(policy);
 		return new ResponseEntity<Policy>(createdPolicy, HttpStatus.CREATED);
 	}
@@ -41,7 +43,7 @@ public class PolicyController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Policy> updatePolicy(@PathVariable int id, @RequestBody Policy policy) throws Exception {
+	public ResponseEntity<Policy> updatePolicy(@Valid @PathVariable int id, @RequestBody Policy policy) throws Exception {
 		Policy updatedPolicy = policyService.updatePolicy(id, policy);
 		return new ResponseEntity<Policy>(updatedPolicy, HttpStatus.OK);
 	}
