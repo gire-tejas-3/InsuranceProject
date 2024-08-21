@@ -51,6 +51,7 @@ public class User {
 
 	private boolean maritalStatus;
 	private String occupation;
+	private String nationality;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Address> address;
@@ -62,7 +63,7 @@ public class User {
 
 	public User(String username, String name, String mobileNo, String email, Set<String> role, boolean isActive,
 			String password, LocalDate birthDate, String gender, boolean maritalStatus, List<Address> address,
-			String occupation) {
+			String occupation, String nationality) {
 		this.username = username;
 		this.name = name;
 		this.mobileNo = mobileNo;
@@ -75,6 +76,7 @@ public class User {
 		this.maritalStatus = maritalStatus;
 		this.address = address;
 		this.occupation = occupation;
+		this.nationality = nationality;
 	}
 
 // Getter Setter Methods
@@ -187,7 +189,7 @@ public class User {
 		return "User [id=" + id + ", username=" + username + ", name=" + name + ", mobileNo=" + mobileNo + ", email="
 				+ email + ", role=" + role + ", isActive=" + isActive + ", password=" + password + ", birthDate="
 				+ birthDate + ", gender=" + gender + ", maritalStatus=" + maritalStatus + ", address=" + address
-				+ ", occupation=" + occupation + "]";
+				+ ", occupation=" + occupation + ", nationality=" + nationality + "]";
 	}
 
 }
