@@ -10,6 +10,4 @@ import com.insurance.model.Claim;
 public interface ClaimRepository extends JpaRepository<Claim, Serializable> {
 
 	public Claim findById(Integer id);
-
-	public void deleteById(Integer id);
 }

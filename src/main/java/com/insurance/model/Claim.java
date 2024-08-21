@@ -14,7 +14,7 @@ public class Claim {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int claimId;
+	private int id;
 	private String claimNumber;
 	private String claimDescription;
 	private LocalDate claimDate;
@@ -38,12 +38,12 @@ public class Claim {
 
 	// Getter Setter Method
 
-	public int getClaimId() {
-		return claimId;
+	public int getid() {
+		return id;
 	}
 
-	public void setClaimId(int claimId) {
-		this.claimId = claimId;
+	public void setid(int id) {
+		this.id = id;
 	}
 
 	public String getClaimNumber() {
