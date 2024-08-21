@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.insurance.exceptions.UserNotFoundException;
 import com.insurance.model.User;
 import com.insurance.repository.UserRepository;
 import com.insurance.service.UserService;
@@ -31,12 +32,26 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public User updateUser(Integer id, User user) throws Exception {
-		if (!userRepository.existsById(id)) {
-			throw new Exception("User Not Found with id: " + id);
-		}
-		return userRepository.save(user);
+	public User updateUser(Integer id, User user) {
+		User exsistingUser = userRepository.findById(id);
 
+		if (exsistingUser == null) {
+			throw new UserNotFoundException("User with id " + id + " not found");
+		}
+
+		exsistingUser.setUsername(user.getUsername());
+		exsistingUser.setName(user.getName());
+		exsistingUser.setMobileNo(user.getMobileNo());
+		exsistingUser.setEmail(user.getEmail());
+		exsistingUser.setRole(user.getRole());
+		exsistingUser.setActive(user.isActive());
+		exsistingUser.setPassword(user.getPassword());
+		exsistingUser.setBirthDate(user.getBirthDate());
+		exsistingUser.setGender(user.getGender());
+		exsistingUser.setMaritalStatus(user.isMaritalStatus());
+		exsistingUser.setAddress(user.getAddress());
+
+		return userRepository.save(exsistingUser);
 	}
 
 	@Override

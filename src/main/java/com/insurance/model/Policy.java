@@ -6,6 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 import java.util.Random;
 
 @Entity
@@ -16,75 +19,55 @@ public class Policy {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String policyNumber;
-	private String policyType;
-	private long policyPremium;
-	private LocalDate policyStartDate;
-	private LocalDate policyEndDate;
-	private long policyCoverageAmount;
 
-	// Constructors
+	@NotNull
+	private String type;
+
+	@Pattern(regexp = "^(ONLINE|OFFLINE|AUTOPAYMENT)$")
+	private String paymentMode; // online, offline, auto payment
+
+	@Pattern(regexp = "^(YEARLY|QUARTERLY|MONTHLY)$")
+	private String payTerm; // yearly, quaterly,semi-quaterly,monthly,daily
+
+	@NotNull
+	private double settlementRatio;
+	private String kycDocuments; // adharcard or pancard or passport(mapped with entity)
+
+	@NotNull
+	private LocalDate startDate;
+
+	@NotNull
+	private LocalDate expireDate;
+
+	@NotNull
+	private long coverageAmount;
+
+	// Constructor
 
 	public Policy() {
-		this.policyNumber = generatePolicyNumber();
+
 	}
 
-	public Policy(String policyType, long policyPremium, LocalDate policyStartDate, LocalDate policyEndDate,
-			long policyCoverageAmount) {
-		this.policyType = policyType;
-		this.policyPremium = policyPremium;
-		this.policyStartDate = policyStartDate;
-		this.policyEndDate = policyEndDate;
-		this.policyCoverageAmount = policyCoverageAmount;
+	public Policy(String type, String paymentMode, String payTerm, double settlementRatio, String kycDocuments,
+			LocalDate startDate, LocalDate expireDate, long coverageAmount) {
+		this.type = type;
+		this.paymentMode = paymentMode;
+		this.payTerm = payTerm;
+		this.settlementRatio = settlementRatio;
+		this.kycDocuments = kycDocuments;
+		this.startDate = startDate;
+		this.expireDate = expireDate;
+		this.coverageAmount = coverageAmount;
 	}
 
-	// Getter Setter Methods
+	// Getter Setter Method
 
-	public int getid() {
+	public int getId() {
 		return id;
 	}
 
-	public void setid(int id) {
+	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getPolicyType() {
-		return policyType;
-	}
-
-	public void setPolicyType(String policyType) {
-		this.policyType = policyType;
-	}
-
-	public long getPolicyPremium() {
-		return policyPremium;
-	}
-
-	public void setPolicyPremium(long policyPremium) {
-		this.policyPremium = policyPremium;
-	}
-
-	public LocalDate getPolicyStartDate() {
-		return policyStartDate;
-	}
-
-	public void setPolicyStartDate(LocalDate policyStartDate) {
-		this.policyStartDate = policyStartDate;
-	}
-
-	public LocalDate getPolicyEndDate() {
-		return policyEndDate;
-	}
-
-	public void setPolicyEndDate(LocalDate policyEndDate) {
-		this.policyEndDate = policyEndDate;
-	}
-
-	public long getPolicyCoverageAmount() {
-		return policyCoverageAmount;
-	}
-
-	public void setPolicyCoverageAmount(long policyCoverageAmount) {
-		this.policyCoverageAmount = policyCoverageAmount;
 	}
 
 	public String getPolicyNumber() {
@@ -92,16 +75,79 @@ public class Policy {
 	}
 
 	public void setPolicyNumber(String policyNumber) {
-		this.policyNumber = generatePolicyNumber();
+		this.policyNumber = policyNumber;
 	}
 
-	// To String Method
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getPaymentMode() {
+		return paymentMode;
+	}
+
+	public void setPaymentMode(String paymentMode) {
+		this.paymentMode = paymentMode;
+	}
+
+	public String getPayTerm() {
+		return payTerm;
+	}
+
+	public void setPayTerm(String payTerm) {
+		this.payTerm = payTerm;
+	}
+
+	public double getSettlementRatio() {
+		return settlementRatio;
+	}
+
+	public void setSettlementRatio(double settlementRatio) {
+		this.settlementRatio = settlementRatio;
+	}
+
+	public String getKycDocuments() {
+		return kycDocuments;
+	}
+
+	public void setKycDocuments(String kycDocuments) {
+		this.kycDocuments = kycDocuments;
+	}
+
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+
+	public LocalDate getExpireDate() {
+		return expireDate;
+	}
+
+	public void setExpireDate(LocalDate expireDate) {
+		this.expireDate = expireDate;
+	}
+
+	public long getCoverageAmount() {
+		return coverageAmount;
+	}
+
+	public void setCoverageAmount(long coverageAmount) {
+		this.coverageAmount = coverageAmount;
+	}
 
 	@Override
 	public String toString() {
-		return "Policy [id=" + id + ", policyType=" + policyType + ", policyPremium=" + policyPremium
-				+ ", policyStartDate=" + policyStartDate + ", policyEndDate=" + policyEndDate
-				+ ", policyCoverageAmount=" + policyCoverageAmount + "]";
+		return "Policy [id=" + id + ", policyNumber=" + policyNumber + ", type=" + type + ", paymentMode=" + paymentMode
+				+ ", payTerm=" + payTerm + ", settlementRatio=" + settlementRatio + ", kycDocuments=" + kycDocuments
+				+ ", startDate=" + startDate + ", expireDate=" + expireDate + ", coverageAmount=" + coverageAmount
+				+ "]";
 	}
 
 	// Create Method for Generate auto policyNumber

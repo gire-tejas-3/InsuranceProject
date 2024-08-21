@@ -15,7 +15,7 @@ public interface UserService {
 	public List<User> getAllUser();
 
 	// Update
-	public User updateUser(Integer id, User user) throws Exception;
+	public User updateUser(Integer id, User user);
 
 	// Delete
 	public void deleteUser(Integer id);
