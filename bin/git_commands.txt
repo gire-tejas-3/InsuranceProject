@@ -1,0 +1,54 @@
+// Clone Project 
+git clone git-repo-url
+
+// Create Branch
+git branch branchName
+
+// Switch Branch
+git checkout branchName
+
+// create new branch and Switch to Branch
+git checkout -b branchName
+
+// Check status
+git status
+
+// Add untracked files into working directory
+git add .
+
+// commit Changes
+git commit -m "Message"
+
+// push 
+git push origin branchName
+
+// pull
+git pull origin branchName
+
+// unstage files
+git stash 
+git stash fileName
+
+************************** Team Lead ***********************************
+
+Team Leads Work
+ - compare code
+ - check pull request
+ - merge code
+
+How to create pull request in GitHub
+1. Go to GitHub
+2. Go to repository and open pull request
+3. click on compare and create pull request
+3. Create Pull request
+
+
+How to Merge code
+1. After pull request created 
+2. Go to section where you can see 
+	- Require approval from specific reviewers before merging
+	- Continuous integration has not been set up
+	- This branch has no conflicts with the base branch
+
+3. Select Squash and Merge from dropdown and click
+
