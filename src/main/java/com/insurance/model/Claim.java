@@ -7,6 +7,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "claim")
@@ -16,9 +19,13 @@ public class Claim {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String claimNumber;
+	@Size(min = 50, max = 150, message = "The number of characters should not be less then 50 and greater then 150.")
 	private String claimDescription;
+	@NotNull(message = "Please enter the claim date, claim date must not be null.")
 	private LocalDate claimDate;
+	@NotNull(message = "Claim status is required.")
 	private String claimStatus;
+	@NotNull
 	private long claimAmount;
 	// private int policyId;
 
