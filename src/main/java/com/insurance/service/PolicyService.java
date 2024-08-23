@@ -14,7 +14,9 @@ public interface PolicyService {
 	public Policy findById(int id);
 
 	// Update
-	public Policy updatePolicy(int id, Policy policy) throws Exception;
+	public Policy updatePolicy(int id, Policy policy);
+
+	public Policy updatePolicyStatus(int id, String status) throws Exception;
 
 	// Delete
 	public void deletePolicy(int id);

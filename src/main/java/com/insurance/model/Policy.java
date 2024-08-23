@@ -1,15 +1,20 @@
 package com.insurance.model;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-
-import java.util.Random;
 
 @Entity
 @Table(name = "policy")
@@ -42,22 +47,31 @@ public class Policy {
 	@NotNull
 	private long coverageAmount;
 
+	@Pattern(regexp = "^(AVAILABLE|INPROCESS|APPROVED|REJECTED)$")
+	private String status = "AVAILABLE";
+	
+	@ManyToOne
+	@JoinColumn(name = "user_id",referencedColumnName = "id")
+	private User user;
+	
 	// Constructor
 
 	public Policy() {
-
+		this.policyNumber = generatePolicyNumber();
 	}
 
 	public Policy(String type, String paymentMode, String payTerm, double settlementRatio, String kycDocuments,
-			LocalDate startDate, LocalDate expireDate, long coverageAmount) {
+			LocalDate startDate, LocalDate expireDate, long coverageAmount, String status) {
+		this();
 		this.type = type;
-		this.paymentMode = paymentMode;
-		this.payTerm = payTerm;
+		this.paymentMode = paymentMode.toUpperCase();
+		this.payTerm = payTerm.toUpperCase();
 		this.settlementRatio = settlementRatio;
 		this.kycDocuments = kycDocuments;
 		this.startDate = startDate;
 		this.expireDate = expireDate;
 		this.coverageAmount = coverageAmount;
+		this.status = status.toUpperCase();
 	}
 
 	// Getter Setter Method
@@ -91,7 +105,7 @@ public class Policy {
 	}
 
 	public void setPaymentMode(String paymentMode) {
-		this.paymentMode = paymentMode;
+		this.paymentMode = paymentMode.toUpperCase();
 	}
 
 	public String getPayTerm() {
@@ -99,7 +113,7 @@ public class Policy {
 	}
 
 	public void setPayTerm(String payTerm) {
-		this.payTerm = payTerm;
+		this.payTerm = payTerm.toUpperCase();
 	}
 
 	public double getSettlementRatio() {
@@ -142,28 +156,32 @@ public class Policy {
 		this.coverageAmount = coverageAmount;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status.toUpperCase();
+	}
+
 	@Override
 	public String toString() {
 		return "Policy [id=" + id + ", policyNumber=" + policyNumber + ", type=" + type + ", paymentMode=" + paymentMode
 				+ ", payTerm=" + payTerm + ", settlementRatio=" + settlementRatio + ", kycDocuments=" + kycDocuments
 				+ ", startDate=" + startDate + ", expireDate=" + expireDate + ", coverageAmount=" + coverageAmount
-				+ "]";
+				+ ", status=" + status + "]";
 	}
 
 	// Create Method for Generate auto policyNumber
 
 	public String generatePolicyNumber() {
+		Instant now = Instant.now();
+		LocalDateTime dateTime = LocalDateTime.ofInstant(now, ZoneId.systemDefault());
 
-		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-		Random random = new Random();
-		int length = 8;
-		StringBuilder stringbuilder = new StringBuilder(length);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMYYHHmmss");
+		String timestamp = dateTime.format(formatter);
 
-		for (int i = 0; i < length; i++) {
-			int index = random.nextInt(characters.length());
-			stringbuilder.append(characters.charAt(index));
-		}
-		return stringbuilder.toString();
+		return "POL" + timestamp;
 	}
 
 }

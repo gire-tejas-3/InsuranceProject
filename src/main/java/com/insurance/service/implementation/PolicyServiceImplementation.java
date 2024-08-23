@@ -3,6 +3,8 @@ package com.insurance.service.implementation;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.insurance.exceptions.PolicyNotFoundException;
 import com.insurance.model.Policy;
 import com.insurance.repository.PolicyRepository;
 import com.insurance.service.PolicyService;
@@ -29,10 +31,10 @@ public class PolicyServiceImplementation implements PolicyService {
 	}
 
 	@Override
-	public Policy updatePolicy(int id, Policy policy) throws Exception {
+	public Policy updatePolicy(int id, Policy policy) {
 		Policy exsistingPolicy = policyRepository.findById(id);
 		if (exsistingPolicy == null) {
-			throw new Exception("Policy is not found");
+			throw new PolicyNotFoundException("Policy is not found");
 		}
 		return policyRepository.save(policy);
 	}
@@ -40,5 +42,20 @@ public class PolicyServiceImplementation implements PolicyService {
 	@Override
 	public void deletePolicy(int id) {
 		policyRepository.deleteById(id);
+	}
+
+	@Override
+	public Policy updatePolicyStatus(int id, String status) throws Exception {
+		Policy exsistingPolicy = policyRepository.findById(id);
+		if (exsistingPolicy == null) {
+			throw new PolicyNotFoundException("Policy is not found");
+		}
+
+		if (!exsistingPolicy.getStatus().equals("INPROCESS")) {
+			throw new Exception("Only policies with `INPROCESS` status can be updated");
+		}
+
+		exsistingPolicy.setStatus(status);
+		return policyRepository.save(exsistingPolicy);
 	}
 }
