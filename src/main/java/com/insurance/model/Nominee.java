@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -38,7 +40,9 @@ public class Nominee {
 
 	@NotNull(message = "Please enter your address.")
 	private String address;
-
+	
+	@JoinColumn(name = "policyId" ,insertable = false, updatable = false)
+    @ManyToOne
 	private Integer policyId; // (FK) MTO
 
 	public Nominee() {

@@ -5,10 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.List;
 import java.util.Random;
 
 @Entity
@@ -42,7 +44,18 @@ public class Policy {
 	@NotNull
 	private long coverageAmount;
 
+	@OneToMany(mappedBy = "policyId")
+	private List<Nominee> nomineeList;
+
 	// Constructor
+
+	public List<Nominee> getNomineeList() {
+		return nomineeList;
+	}
+
+	public void setNomineeList(List<Nominee> nomineeList) {
+		this.nomineeList = nomineeList;
+	}
 
 	public Policy() {
 
@@ -147,7 +160,7 @@ public class Policy {
 		return "Policy [id=" + id + ", policyNumber=" + policyNumber + ", type=" + type + ", paymentMode=" + paymentMode
 				+ ", payTerm=" + payTerm + ", settlementRatio=" + settlementRatio + ", kycDocuments=" + kycDocuments
 				+ ", startDate=" + startDate + ", expireDate=" + expireDate + ", coverageAmount=" + coverageAmount
-				+ "]";
+				+ ", nomineeList=" + nomineeList + "]";
 	}
 
 	// Create Method for Generate auto policyNumber
