@@ -12,9 +12,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+
+import java.util.List;
 
 @Entity
 @Table(name = "policy")
@@ -54,7 +57,19 @@ public class Policy {
 	@JoinColumn(name = "user_id",referencedColumnName = "id")
 	private User user;
 	
+
+	@OneToMany(mappedBy = "policyId")
+	private List<Nominee> nomineeList;
+
 	// Constructor
+
+	public List<Nominee> getNomineeList() {
+		return nomineeList;
+	}
+
+	public void setNomineeList(List<Nominee> nomineeList) {
+		this.nomineeList = nomineeList;
+	}
 
 	public Policy() {
 		this.policyNumber = generatePolicyNumber();
@@ -169,6 +184,7 @@ public class Policy {
 		return "Policy [id=" + id + ", policyNumber=" + policyNumber + ", type=" + type + ", paymentMode=" + paymentMode
 				+ ", payTerm=" + payTerm + ", settlementRatio=" + settlementRatio + ", kycDocuments=" + kycDocuments
 				+ ", startDate=" + startDate + ", expireDate=" + expireDate + ", coverageAmount=" + coverageAmount
+				+ ", nomineeList=" + nomineeList 
 				+ ", status=" + status + "]";
 	}
 
