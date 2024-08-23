@@ -1,7 +1,10 @@
 package com.insurance.model;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Random;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,8 +26,8 @@ public class Claim {
 	@NotNull
 	private LocalDate claimDate;
 
-	@Pattern(regexp = "^(INPROCESS|APPROVED|REJECTED)&")
-	private String status; // Aprroved or Rejected or in process
+	@Pattern(regexp = "^(AVAILABLE|INPROCESS|APPROVED|REJECTED)$")
+	private String status = "AVAILABLE"; // Aprroved or Rejected or in process
 
 	@NotNull
 	private long claimAmount;
@@ -32,10 +35,10 @@ public class Claim {
 	@NotNull
 	private int gracePeriod; // 30DAYS OR 60 DAYS
 
-	@Pattern(regexp = "^(MATURITY|DEATH)&")
+	@Pattern(regexp = "^(MATURITY|DEATH)$")
 	private String category; // maturity or death
 
-	@Pattern(regexp = "^(CHEQUE|TRANSFER)&")
+	@Pattern(regexp = "^(CHEQUE|TRANSFER)$")
 	private String modeOfPayment; // cheque, digital transfer
 
 	private String medicalRecords; // medical bills, hospital bills
@@ -45,19 +48,20 @@ public class Claim {
 	// Constructor
 
 	public Claim() {
-
+		this.claimNumber = generateClaimNumber();
 	}
 
 	public Claim(String description, LocalDate claimDate, String status, long claimAmount, int gracePeriod,
 			String category, String modeOfPayment, String medicalRecords) {
+		this();
 		this.description = description;
 		this.claimDate = claimDate;
-		this.status = status;
 		this.claimAmount = claimAmount;
 		this.gracePeriod = gracePeriod;
-		this.category = category;
-		this.modeOfPayment = modeOfPayment;
+		this.category = category.toUpperCase();
+		this.modeOfPayment = modeOfPayment.toUpperCase();
 		this.medicalRecords = medicalRecords;
+		this.status = status.toUpperCase();
 	}
 
 	// Getter Setter Method
@@ -99,7 +103,7 @@ public class Claim {
 	}
 
 	public void setStatus(String status) {
-		this.status = status;
+		this.status = status.toUpperCase();
 	}
 
 	public long getClaimAmount() {
@@ -123,7 +127,7 @@ public class Claim {
 	}
 
 	public void setCategory(String category) {
-		this.category = category;
+		this.category = category.toUpperCase();
 	}
 
 	public String getModeOfPayment() {
@@ -131,7 +135,7 @@ public class Claim {
 	}
 
 	public void setModeOfPayment(String modeOfPayment) {
-		this.modeOfPayment = modeOfPayment;
+		this.modeOfPayment = modeOfPayment.toUpperCase();
 	}
 
 	public String getMedicalRecords() {
@@ -155,16 +159,13 @@ public class Claim {
 	// Create method for generate auto claim number
 
 	public String generateClaimNumber() {
-		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-		Random random = new Random();
-		int length = 6;
-		StringBuilder stringbuilder = new StringBuilder(length);
+		Instant now = Instant.now();
+		LocalDateTime dateTime = LocalDateTime.ofInstant(now, ZoneId.systemDefault());
 
-		for (int i = 0; i < length; i++) {
-			int index = random.nextInt(characters.length());
-			stringbuilder.append(characters.charAt(index));
-		}
-		return stringbuilder.toString();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMYYHHmmss");
+		String timestamp = dateTime.format(formatter);
+
+		return "CL" + timestamp;
 	}
 
 }

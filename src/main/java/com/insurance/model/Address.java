@@ -18,7 +18,7 @@ public class Address {
 	private int id;
 
 	private String addressLine;
-
+	
 	private String city;
 
 	private String country;
