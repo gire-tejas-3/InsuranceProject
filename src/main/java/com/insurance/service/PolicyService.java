@@ -9,7 +9,7 @@ public interface PolicyService {
 	public Policy createPolicy(Policy policy);
 
 	// Get
-	public List<Policy> getAllPolicy();
+	public List<Policy> getAllPolicy(String status);
 
 	public Policy findById(int id);
 

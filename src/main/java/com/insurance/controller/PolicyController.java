@@ -31,8 +31,8 @@ public class PolicyController {
 	}
 
 	@GetMapping
-	private ResponseEntity<List<Policy>> getAllPolicy() {
-		List<Policy> policyList = policyService.getAllPolicy();
+	private ResponseEntity<List<Policy>> getAllPolicy(String status) {
+		List<Policy> policyList = policyService.getAllPolicy(status);
 		return new ResponseEntity<List<Policy>>(policyList, HttpStatus.OK);
 	}
 

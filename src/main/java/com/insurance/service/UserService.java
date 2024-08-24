@@ -12,7 +12,7 @@ public interface UserService {
 	// Find
 	public User findById(Integer id);
 
-	public List<User> getAllUser();
+	public List<User> getAllUser(String role);
 
 	// Update
 	public User updateUser(Integer id, User user);

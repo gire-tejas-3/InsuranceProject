@@ -43,12 +43,7 @@ public class AdminController {
 	// Policy
 	@GetMapping("/policies")
 	public ResponseEntity<List<Policy>> getAllPolicies(@RequestParam(required = false) String status) {
-		List<Policy> policies;
-		if (status != null) {
-			policies = policyService.getAllPolicy().stream().filter(policy -> policy.getStatus().equals(status))
-					.toList();
-		}
-		policies = policyService.getAllPolicy();
+		List<Policy> policies = policyService.getAllPolicy(status);
 		return new ResponseEntity<List<Policy>>(policies, HttpStatus.OK);
 	}
 
@@ -72,24 +67,9 @@ public class AdminController {
 	}
 
 	@PutMapping("/policy/{id}")
-	public ResponseEntity<Policy> updatePolicy(@PathVariable Integer id, @RequestParam String status) throws Exception {
+	public ResponseEntity<Policy> updatePolicyStatus(@PathVariable Integer id, @RequestParam String status)
+			throws Exception {
 		Policy updatedPolicy = policyService.updatePolicyStatus(id, status);
-		return new ResponseEntity<Policy>(updatedPolicy, HttpStatus.OK);
-	}
-
-	@PutMapping("/policy/{id}")
-	public ResponseEntity<Policy> updatePolicyStatus(int id, String status) throws Exception {
-		Policy exsistingPolicy = policyService.findById(id);
-		if (exsistingPolicy == null) {
-			throw new PolicyNotFoundException("Policy is not found");
-		}
-
-		if (!exsistingPolicy.getStatus().equals("INPROCESS")) {
-			throw new Exception("Only policies with `INPROCESS` status can be updated");
-		}
-
-		exsistingPolicy.setStatus(status);
-		Policy updatedPolicy = policyService.createPolicy(exsistingPolicy);
 		return new ResponseEntity<Policy>(updatedPolicy, HttpStatus.OK);
 	}
 
@@ -108,45 +88,31 @@ public class AdminController {
 	}
 
 	@GetMapping("/users")
-	public ResponseEntity<List<User>> getAllUsers() {
-		List<User> usersList = userService.getAllUser();
+	public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String role) {
+		List<User> usersList = userService.getAllUser(role);
 		return new ResponseEntity<List<User>>(usersList, HttpStatus.OK); // 200 for Ok
 	}
 
 	@DeleteMapping("/user/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
 		userService.deleteUser(id);
+		// throw
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 
 	// Claim
 
 	@PutMapping("/claim/{id}")
-	public ResponseEntity<Claim> updateClaimStatus(int id, String status) throws Exception {
-		Claim exsistingClaim = claimService.findById(id);
-		if (exsistingClaim == null) {
-			throw new ClaimNotFoundException("Claim is not found");
-		}
-
-		if (!exsistingClaim.getStatus().equals("INPROCESS")) {
-			throw new Exception("Only claims with `INPROCESS` status can be updated");
-		}
-
-		exsistingClaim.setStatus(status);
-		Claim updatedClaim = claimService.createClaim(exsistingClaim);
+	public ResponseEntity<Claim> updateClaimStatus(@PathVariable int id, @RequestParam(required = false) String status)
+			throws Exception {
+		Claim updatedClaim = claimService.updateClaimStatus(id, status);
 		return new ResponseEntity<Claim>(updatedClaim, HttpStatus.OK);
 	}
 
 	@GetMapping("/claims")
 	public ResponseEntity<List<Claim>> getAllClaim(@RequestParam(required = false) String status) {
-		List<Claim> claimList;
-
-		if (status != null) {
-			claimList = claimService.getAllClaim().stream().filter(claim -> claim.getStatus().equals(status)).toList();
-		}
-		claimList = claimService.getAllClaim();
-
-		return new ResponseEntity<List<Claim>>(claimList, HttpStatus.OK);
+		List<Claim> claims = claimService.getAllClaim(status);
+		return new ResponseEntity<List<Claim>>(claims, HttpStatus.OK);
 	}
 
 }

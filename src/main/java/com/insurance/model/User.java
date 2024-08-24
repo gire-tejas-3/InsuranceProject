@@ -36,7 +36,7 @@ public class User {
 	@Email(message = "Please enter a valid email")
 	private String email;
 
-	@Pattern(regexp = "^(ADMIN|USER)$")
+	@Pattern(regexp = "^(ADMIN|USER|AGENT)$")
 	private Set<String> role;
 
 	private boolean isActive;
