@@ -27,8 +27,13 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public List<User> getAllUser() {
-		return userRepository.findAll();
+	public List<User> getAllUser(String role) {
+		List<User> users;
+		if (role != null) {
+			users = userRepository.findAll().stream().filter(user -> user.getRole().equals(role)).toList();
+		}
+		users = userRepository.findAll();
+		return users;
 	}
 
 	@Override

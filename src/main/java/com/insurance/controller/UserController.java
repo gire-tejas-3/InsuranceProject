@@ -41,13 +41,11 @@ public class UserController {
 			@RequestParam(required = false, defaultValue = "AVAILABLE") String status) {
 		List<Policy> policies;
 		if (status != null) {
-			policies = policyService.getAllPolicy().stream().filter(policy -> policy.getStatus().equals(status))
+			policies = policyService.getAllPolicy(status).stream().filter(policy -> policy.getStatus().equals(status))
 					.toList();
 		}
-		policies = policyService.getAllPolicy();
+		policies = policyService.getAllPolicy(status);
 		return new ResponseEntity<List<Policy>>(policies, HttpStatus.OK);
 	}
-	
-	
 
 }

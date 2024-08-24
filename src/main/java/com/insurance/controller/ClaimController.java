@@ -31,8 +31,8 @@ public class ClaimController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Claim>> getAllClaim() {
-		List<Claim> claimList = claimService.getAllClaim();
+	public ResponseEntity<List<Claim>> getAllClaim(String status) {
+		List<Claim> claimList = claimService.getAllClaim(status);
 		return new ResponseEntity<List<Claim>>(claimList, HttpStatus.OK);
 	}
 

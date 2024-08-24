@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.insurance.exceptions.PolicyNotFoundException;
 import com.insurance.model.Policy;
+import com.insurance.model.User;
 import com.insurance.repository.PolicyRepository;
 import com.insurance.service.PolicyService;
 
@@ -21,8 +22,13 @@ public class PolicyServiceImplementation implements PolicyService {
 	}
 
 	@Override
-	public List<Policy> getAllPolicy() {
-		return policyRepository.findAll();
+	public List<Policy> getAllPolicy(String status) {
+		List<Policy> policies;
+		if (status != null) {
+			policies = policyRepository.findAll().stream().filter(policy -> policy.getStatus().equals(status)).toList();
+		}
+		policies = policyRepository.findAll();
+		return policies;
 	}
 
 	@Override
@@ -36,11 +42,22 @@ public class PolicyServiceImplementation implements PolicyService {
 		if (exsistingPolicy == null) {
 			throw new PolicyNotFoundException("Policy is not found");
 		}
-		return policyRepository.save(policy);
+
+		exsistingPolicy.setType("AVAILABLE");
+		exsistingPolicy.setPaymentMode(policy.getPaymentMode());
+		exsistingPolicy.setPayTerm(policy.getPayTerm());
+		exsistingPolicy.setSettlementRatio(policy.getSettlementRatio());
+
+		return policyRepository.save(exsistingPolicy);
 	}
 
 	@Override
 	public void deletePolicy(int id) {
+		Policy exsistingPolicy = policyRepository.findById(id);
+		if (exsistingPolicy == null) {
+			throw new PolicyNotFoundException("Policy is not found");
+		}
+
 		policyRepository.deleteById(id);
 	}
 
