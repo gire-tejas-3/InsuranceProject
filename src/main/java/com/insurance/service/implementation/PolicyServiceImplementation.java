@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.insurance.exceptions.PolicyNotFoundException;
 import com.insurance.model.Policy;
-import com.insurance.model.User;
 import com.insurance.repository.PolicyRepository;
 import com.insurance.service.PolicyService;
 
@@ -22,7 +21,7 @@ public class PolicyServiceImplementation implements PolicyService {
 	}
 
 	@Override
-	public List<Policy> getAllPolicy(String status) {
+	public List<Policy> getAllPolicy(String status) { 
 		List<Policy> policies;
 		if (status != null) {
 			policies = policyRepository.findAll().stream().filter(policy -> policy.getStatus().equals(status)).toList();

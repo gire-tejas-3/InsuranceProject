@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.insurance.exceptions.ClaimNotFoundException;
-import com.insurance.exceptions.PolicyNotFoundException;
 import com.insurance.model.Claim;
 import com.insurance.model.Policy;
 import com.insurance.model.User;
