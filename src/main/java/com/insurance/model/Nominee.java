@@ -1,11 +1,16 @@
 package com.insurance.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -39,10 +44,12 @@ public class Nominee {
 	private String dateOfBirth;
 
 	@NotNull(message = "Please enter your address.")
-	private String address;
-	
-	@JoinColumn(name = "policyId" ,insertable = false, updatable = false)
-    @ManyToOne
+	@OneToOne(mappedBy = "nominee")
+	@JsonManagedReference
+	private List<Address> address;
+
+	@JoinColumn(name = "policyId", insertable = false, updatable = false)
+	@ManyToOne
 	private Integer policyId; // (FK) MTO
 
 	public Nominee() {
@@ -50,8 +57,8 @@ public class Nominee {
 	}
 
 	public Nominee(String name, String gender, String relationship, String mobileNo, String email, String dateOfBirth,
-			String address, Integer policyId) {
-		
+			List<Address> address, Integer policyId) {
+
 		this.name = name;
 		this.gender = gender;
 		this.relationship = relationship;
@@ -118,11 +125,11 @@ public class Nominee {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public String getAddress() {
+	public List<Address> getAddress() {
 		return address;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(List<Address> address) {
 		this.address = address;
 	}
 

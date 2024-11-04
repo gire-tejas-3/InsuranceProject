@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.insurance.exceptions.ClaimNotFoundException;
 import com.insurance.model.Claim;
+import com.insurance.model.Status;
 import com.insurance.repository.ClaimRepository;
 import com.insurance.service.ClaimService;
 
@@ -64,7 +65,7 @@ public class ClaimServiceImplementation implements ClaimService {
 			throw new Exception("Only claims with `INPROCESS` status can be updated");
 		}
 
-		exsistingClaim.setStatus(status);
+		exsistingClaim.setStatus(Status.valueOf(status));
 		Claim updatedClaim = claimRepository.save(exsistingClaim);
 		return updatedClaim;
 	}

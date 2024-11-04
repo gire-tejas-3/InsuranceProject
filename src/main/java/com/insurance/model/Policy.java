@@ -7,6 +7,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
@@ -26,70 +27,69 @@ public class Policy {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String policyNumber;
 
-	@NotNull
+	private final String policyNumber;
+
 	private String type;
 
+	@Enumerated(EnumType.STRING)
 	@Pattern(regexp = "^(ONLINE|OFFLINE|AUTOPAYMENT)$")
-	private String paymentMode; // online, offline, auto payment
+	private PaymentMode paymentMode; // online, offline, auto payment
 
+	@Enumerated(EnumType.STRING)
 	@Pattern(regexp = "^(YEARLY|QUARTERLY|MONTHLY)$")
-	private String payTerm; // yearly, quaterly,semi-quaterly,monthly,daily
+	private PayTerm payTerm;
 
-	@NotNull
 	private double settlementRatio;
-	private String kycDocuments; // adharcard or pancard or passport(mapped with entity)
+	private String kycDocuments;
 
-	@NotNull
 	private LocalDate startDate;
 
-	@NotNull
 	private LocalDate expireDate;
 
-	@NotNull
 	private long coverageAmount;
 
+	@Enumerated(EnumType.STRING)
 	@Pattern(regexp = "^(AVAILABLE|INPROCESS|APPROVED|REJECTED)$")
-	private String status = "AVAILABLE";
-	
+	private Status status;
+
 	@ManyToOne
-	@JoinColumn(name = "user_id",referencedColumnName = "id")
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
-	
 
 	@OneToMany(mappedBy = "policyId")
 	private List<Nominee> nomineeList;
 
-	// Constructor
+	private static String generatePolicyNumber() {
+		Instant now = Instant.now();
+		LocalDateTime dateTime = LocalDateTime.ofInstant(now, ZoneId.systemDefault());
 
-	public List<Nominee> getNomineeList() {
-		return nomineeList;
-	}
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMYYHHmmss");
+		String timestamp = dateTime.format(formatter);
 
-	public void setNomineeList(List<Nominee> nomineeList) {
-		this.nomineeList = nomineeList;
+		return "RMT" + timestamp;
 	}
 
 	public Policy() {
 		this.policyNumber = generatePolicyNumber();
 	}
 
-	public Policy(String type, String paymentMode, String payTerm, double settlementRatio, String kycDocuments,
-			LocalDate startDate, LocalDate expireDate, long coverageAmount, String status) {
+	public Policy(String type, PaymentMode paymentMode, PayTerm payTerm, double settlementRatio, String kycDocuments,
+			LocalDate startDate, LocalDate expireDate, long coverageAmount, Status status, User user,
+			List<Nominee> nomineeList) {
 		this();
 		this.type = type;
-		this.paymentMode = paymentMode.toUpperCase();
-		this.payTerm = payTerm.toUpperCase();
+		this.paymentMode = paymentMode;
+		this.payTerm = payTerm;
 		this.settlementRatio = settlementRatio;
 		this.kycDocuments = kycDocuments;
 		this.startDate = startDate;
 		this.expireDate = expireDate;
 		this.coverageAmount = coverageAmount;
-		this.status = status.toUpperCase();
+		this.status = status;
+		this.user = user;
+		this.nomineeList = nomineeList;
 	}
-
-	// Getter Setter Method
 
 	public int getId() {
 		return id;
@@ -97,14 +97,6 @@ public class Policy {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getPolicyNumber() {
-		return policyNumber;
-	}
-
-	public void setPolicyNumber(String policyNumber) {
-		this.policyNumber = policyNumber;
 	}
 
 	public String getType() {
@@ -115,20 +107,20 @@ public class Policy {
 		this.type = type;
 	}
 
-	public String getPaymentMode() {
+	public PaymentMode getPaymentMode() {
 		return paymentMode;
 	}
 
-	public void setPaymentMode(String paymentMode) {
-		this.paymentMode = paymentMode.toUpperCase();
+	public void setPaymentMode(PaymentMode paymentMode) {
+		this.paymentMode = paymentMode;
 	}
 
-	public String getPayTerm() {
+	public PayTerm getPayTerm() {
 		return payTerm;
 	}
 
-	public void setPayTerm(String payTerm) {
-		this.payTerm = payTerm.toUpperCase();
+	public void setPayTerm(PayTerm payTerm) {
+		this.payTerm = payTerm;
 	}
 
 	public double getSettlementRatio() {
@@ -171,12 +163,32 @@ public class Policy {
 		this.coverageAmount = coverageAmount;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status.toUpperCase();
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public List<Nominee> getNomineeList() {
+		return nomineeList;
+	}
+
+	public void setNomineeList(List<Nominee> nomineeList) {
+		this.nomineeList = nomineeList;
+	}
+
+	public String getPolicyNumber() {
+		return policyNumber;
 	}
 
 	@Override
@@ -184,20 +196,7 @@ public class Policy {
 		return "Policy [id=" + id + ", policyNumber=" + policyNumber + ", type=" + type + ", paymentMode=" + paymentMode
 				+ ", payTerm=" + payTerm + ", settlementRatio=" + settlementRatio + ", kycDocuments=" + kycDocuments
 				+ ", startDate=" + startDate + ", expireDate=" + expireDate + ", coverageAmount=" + coverageAmount
-				+ ", nomineeList=" + nomineeList 
-				+ ", status=" + status + "]";
-	}
-
-	// Create Method for Generate auto policyNumber
-
-	public String generatePolicyNumber() {
-		Instant now = Instant.now();
-		LocalDateTime dateTime = LocalDateTime.ofInstant(now, ZoneId.systemDefault());
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMYYHHmmss");
-		String timestamp = dateTime.format(formatter);
-
-		return "POL" + timestamp;
+				+ ", status=" + status + ", user=" + user + ", nomineeList=" + nomineeList + "]";
 	}
 
 }

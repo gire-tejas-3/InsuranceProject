@@ -6,9 +6,12 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -20,19 +23,21 @@ public class Claim {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private String claimNumber;
+
+	private final String claimNumber;
+
+	@Lob
 	private String description;
 
 	@NotNull
 	private LocalDate claimDate;
 
+	@Enumerated(EnumType.STRING)
 	@Pattern(regexp = "^(AVAILABLE|INPROCESS|APPROVED|REJECTED)$")
-	private String status = "AVAILABLE"; // Aprroved or Rejected or in process
+	private Status status; // Aprroved or Rejected or in process
 
-	@NotNull
 	private long claimAmount;
 
-	@NotNull
 	private int gracePeriod; // 30DAYS OR 60 DAYS
 
 	@Pattern(regexp = "^(MATURITY|DEATH)$")
@@ -43,28 +48,36 @@ public class Claim {
 
 	private String medicalRecords; // medical bills, hospital bills
 
-	// private int policyId;
-
 	// Constructor
 
 	public Claim() {
 		this.claimNumber = generateClaimNumber();
 	}
 
-	public Claim(String description, LocalDate claimDate, String status, long claimAmount, int gracePeriod,
+	public Claim(String description, LocalDate claimDate, Status status, long claimAmount, int gracePeriod,
 			String category, String modeOfPayment, String medicalRecords) {
 		this();
 		this.description = description;
 		this.claimDate = claimDate;
+		this.status = status;
 		this.claimAmount = claimAmount;
 		this.gracePeriod = gracePeriod;
-		this.category = category.toUpperCase();
-		this.modeOfPayment = modeOfPayment.toUpperCase();
+		this.category = category;
+		this.modeOfPayment = modeOfPayment;
 		this.medicalRecords = medicalRecords;
-		this.status = status.toUpperCase();
 	}
 
-	// Getter Setter Method
+	// Create method for generate auto claim number
+
+	public String generateClaimNumber() {
+		Instant now = Instant.now();
+		LocalDateTime dateTime = LocalDateTime.ofInstant(now, ZoneId.systemDefault());
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMYYHHmmss");
+		String timestamp = dateTime.format(formatter);
+
+		return "CLM" + timestamp;
+	}
 
 	public int getId() {
 		return id;
@@ -72,14 +85,6 @@ public class Claim {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getClaimNumber() {
-		return claimNumber;
-	}
-
-	public void setClaimNumber(String claimNumber) {
-		this.claimNumber = claimNumber;
 	}
 
 	public String getDescription() {
@@ -98,12 +103,12 @@ public class Claim {
 		this.claimDate = claimDate;
 	}
 
-	public String getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status.toUpperCase();
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 	public long getClaimAmount() {
@@ -127,7 +132,7 @@ public class Claim {
 	}
 
 	public void setCategory(String category) {
-		this.category = category.toUpperCase();
+		this.category = category;
 	}
 
 	public String getModeOfPayment() {
@@ -135,7 +140,7 @@ public class Claim {
 	}
 
 	public void setModeOfPayment(String modeOfPayment) {
-		this.modeOfPayment = modeOfPayment.toUpperCase();
+		this.modeOfPayment = modeOfPayment;
 	}
 
 	public String getMedicalRecords() {
@@ -146,26 +151,8 @@ public class Claim {
 		this.medicalRecords = medicalRecords;
 	}
 
-	// To String Method
-
-	@Override
-	public String toString() {
-		return "Claim [id=" + id + ", claimNumber=" + claimNumber + ", description=" + description + ", claimDate="
-				+ claimDate + ", status=" + status + ", claimAmount=" + claimAmount + ", gracePeriod=" + gracePeriod
-				+ ", category=" + category + ", modeOfPayment=" + modeOfPayment + ", medicalRecords=" + medicalRecords
-				+ "]";
-	}
-
-	// Create method for generate auto claim number
-
-	public String generateClaimNumber() {
-		Instant now = Instant.now();
-		LocalDateTime dateTime = LocalDateTime.ofInstant(now, ZoneId.systemDefault());
-
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMYYHHmmss");
-		String timestamp = dateTime.format(formatter);
-
-		return "CL" + timestamp;
+	public String getClaimNumber() {
+		return claimNumber;
 	}
 
 }

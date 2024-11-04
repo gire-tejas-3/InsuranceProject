@@ -6,15 +6,16 @@ import org.springframework.stereotype.Service;
 import com.insurance.model.Nominee;
 import com.insurance.repository.NomineeRepository;
 import com.insurance.service.NomineeService;
+
 @Service
-public class NomineeServiceImpl implements NomineeService{
+public class NomineeServiceImpl implements NomineeService {
 
 	@Autowired
 	private NomineeRepository nomineeRepository;
-	
+
 	@Override
 	public Nominee saveNominee(Nominee nominee) {
-	  Nominee nominee1 = nomineeRepository.save(nominee);
+		Nominee nominee1 = nomineeRepository.save(nominee);
 		return nominee1;
 	}
 
@@ -33,6 +34,6 @@ public class NomineeServiceImpl implements NomineeService{
 	@Override
 	public void deleteNominee(int id) {
 		nomineeRepository.deleteById(id);
-		}
+	}
 
 }
