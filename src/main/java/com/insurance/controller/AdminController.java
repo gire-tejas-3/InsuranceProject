@@ -66,7 +66,7 @@ public class AdminController {
 		return new ResponseEntity<Policy>(updatedPolicy, HttpStatus.OK);
 	}
 
-	@PutMapping("/policy/{id}")
+	@PutMapping("/policy/status/{id}")
 	public ResponseEntity<Policy> updatePolicyStatus(@PathVariable Integer id, @RequestParam String status)
 			throws Exception {
 		Policy updatedPolicy = policyService.updatePolicyStatus(id, status);

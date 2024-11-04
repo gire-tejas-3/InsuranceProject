@@ -20,6 +20,8 @@ import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "policy")
 public class Policy {
@@ -57,7 +59,8 @@ public class Policy {
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 
-	@OneToMany(mappedBy = "policyId")
+	@OneToMany(mappedBy = "policy")
+	@JsonManagedReference
 	private List<Nominee> nomineeList;
 
 	private static String generatePolicyNumber() {
