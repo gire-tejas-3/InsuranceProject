@@ -30,17 +30,17 @@ public class NomineeController {
 		return new ResponseEntity<>(createdNominee,HttpStatus.CREATED );
 	
 		}
-	@PutMapping("{/id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Nominee> updateNominee(@Valid @PathVariable Nominee nominee) {
 		Nominee updatedNominee = nomineeService.saveNominee(nominee);
 		return new ResponseEntity<>(updatedNominee,HttpStatus.OK);
 	}
-	@GetMapping("{/id}")
+	@GetMapping("/{id}")
 	 public ResponseEntity<Nominee> getNomineeById(@PathVariable int id) {
 		 Nominee nomineeList=  nomineeService.getNomineeById(id);
 		return new ResponseEntity<Nominee>(nomineeList, HttpStatus.OK);
 	 }
-	 @DeleteMapping("{/id}")
+	 @DeleteMapping("/{id}")
 	 public ResponseEntity<Void> deleteNominee(@PathVariable int id) {
 		 nomineeService.deleteNominee(id);
 		 return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);

@@ -2,6 +2,7 @@ package com.insurance.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
@@ -44,21 +46,22 @@ public class Nominee {
 	private String dateOfBirth;
 
 	@NotNull(message = "Please enter your address.")
-	@OneToOne(mappedBy = "nominee")
+	@OneToMany(mappedBy = "nominee")
 	@JsonManagedReference
 	private List<Address> address;
 
-	@JoinColumn(name = "policyId", insertable = false, updatable = false)
 	@ManyToOne
-	private Integer policyId; // (FK) MTO
+	@JoinColumn(name = "policy_id", referencedColumnName = "id", insertable = false, updatable = false)
+	@JsonBackReference
+	private Policy policy;
 
 	public Nominee() {
 
 	}
 
 	public Nominee(String name, String gender, String relationship, String mobileNo, String email, String dateOfBirth,
-			List<Address> address, Integer policyId) {
-
+			List<Address> address, Policy policy) {
+		super();
 		this.name = name;
 		this.gender = gender;
 		this.relationship = relationship;
@@ -66,7 +69,7 @@ public class Nominee {
 		this.email = email;
 		this.dateOfBirth = dateOfBirth;
 		this.address = address;
-		this.policyId = policyId;
+		this.policy = policy;
 	}
 
 	public int getId() {
@@ -133,19 +136,19 @@ public class Nominee {
 		this.address = address;
 	}
 
-	public Integer getPolicyId() {
-		return policyId;
+	public Policy getPolicy() {
+		return policy;
 	}
 
-	public void setPolicyId(Integer policyId) {
-		this.policyId = policyId;
+	public void setPolicy(Policy policy) {
+		this.policy = policy;
 	}
 
 	@Override
 	public String toString() {
 		return "Nominee [id=" + id + ", name=" + name + ", gender=" + gender + ", relationship=" + relationship
 				+ ", mobileNo=" + mobileNo + ", email=" + email + ", dateOfBirth=" + dateOfBirth + ", address="
-				+ address + ", policyId=" + policyId + "]";
+				+ address + ", policy=" + policy + "]";
 	}
 
 }
