@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.insurance.exceptions.PolicyNotFoundException;
 import com.insurance.model.Policy;
+import com.insurance.model.Status;
 import com.insurance.model.User;
 import com.insurance.repository.PolicyRepository;
 import com.insurance.service.PolicyService;
@@ -72,7 +73,7 @@ public class PolicyServiceImplementation implements PolicyService {
 			throw new Exception("Only policies with `INPROCESS` status can be updated");
 		}
 
-		exsistingPolicy.setStatus(status);
+		exsistingPolicy.setStatus(Status.valueOf(status));
 		return policyRepository.save(exsistingPolicy);
 	}
 }

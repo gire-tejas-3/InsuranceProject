@@ -53,7 +53,7 @@ public class UserServiceImplementation implements UserService {
 		exsistingUser.setPassword(user.getPassword());
 		exsistingUser.setBirthDate(user.getBirthDate());
 		exsistingUser.setGender(user.getGender());
-		exsistingUser.setMaritalStatus(user.isMaritalStatus());
+		exsistingUser.setMaritalStatus(user.getMaritalStatus());
 		exsistingUser.setAddress(user.getAddress());
 
 		return userRepository.save(exsistingUser);

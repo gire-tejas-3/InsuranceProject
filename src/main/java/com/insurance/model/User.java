@@ -1,10 +1,18 @@
 package com.insurance.model;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,12 +25,15 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements UserDetails {
+
+	private static final long serialVersionUID = 7626569018765875940L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(unique = true)
 	@Size(min = 4, max = 12, message = "Please enter a valid username. Username should not be less than 4 and should not be greater than 12 characters.")
 	private String username;
 
@@ -33,13 +44,9 @@ public class User {
 	@Pattern(regexp = "^[0-9]{10, 13}$", message = "Mobile Number should contain only digits")
 	private String mobileNo;
 
+	@Column(unique = true)
 	@Email(message = "Please enter a valid email")
 	private String email;
-
-	@Pattern(regexp = "^(ADMIN|USER|AGENT)$")
-	private Set<String> role;
-
-	private boolean isActive;
 
 	@Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,16}$", message = "Password must be 8 to 16 characters long, contain at least one digit, one uppercase letter, and one special symbol.")
 	private String password;
@@ -49,42 +56,48 @@ public class User {
 	@Pattern(regexp = "^(female|male)$")
 	private String gender;
 
-	private boolean maritalStatus;
 	private String occupation;
 	private String nationality;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Address> address;
 
+	@Enumerated(EnumType.STRING)
+	private UserRole role;
+
+	@Enumerated(EnumType.STRING)
+	private MaritalStatus maritalStatus;
+
+	private boolean isActive;
+
 //	Constructors
 	public User() {
 
 	}
 
-	public User(String username, String name, String mobileNo, String email, Set<String> role, boolean isActive,
-			String password, LocalDate birthDate, String gender, boolean maritalStatus, List<Address> address,
-			String occupation, String nationality) {
+	public User(String username, String name, String mobileNo, String email, String password, LocalDate birthDate,
+			String gender, String occupation, String nationality, List<Address> address, UserRole role,
+			MaritalStatus maritalStatus, boolean isActive) {
 		this.username = username;
 		this.name = name;
 		this.mobileNo = mobileNo;
 		this.email = email;
-		this.role = role;
-		this.isActive = isActive;
 		this.password = password;
 		this.birthDate = birthDate;
 		this.gender = gender;
-		this.maritalStatus = maritalStatus;
-		this.address = address;
 		this.occupation = occupation;
 		this.nationality = nationality;
+		this.address = address;
+		this.role = role;
+		this.maritalStatus = maritalStatus;
+		this.isActive = isActive;
 	}
 
-// Getter Setter Methods
-	public Integer getid() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setid(Integer id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -120,22 +133,6 @@ public class User {
 		this.email = email;
 	}
 
-	public Set<String> getRole() {
-		return role;
-	}
-
-	public void setRole(Set<String> role) {
-		this.role = role;
-	}
-
-	public boolean isActive() {
-		return isActive;
-	}
-
-	public void setActive(boolean isActive) {
-		this.isActive = isActive;
-	}
-
 	public String getPassword() {
 		return password;
 	}
@@ -160,12 +157,20 @@ public class User {
 		this.gender = gender;
 	}
 
-	public boolean isMaritalStatus() {
-		return maritalStatus;
+	public String getOccupation() {
+		return occupation;
 	}
 
-	public void setMaritalStatus(boolean maritalStatus) {
-		this.maritalStatus = maritalStatus;
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
+	}
+
+	public String getNationality() {
+		return nationality;
+	}
+
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
 	}
 
 	public List<Address> getAddress() {
@@ -176,20 +181,41 @@ public class User {
 		this.address = address;
 	}
 
-	public String getOccupation() {
-		return occupation;
+	public UserRole getRole() {
+		return role;
 	}
 
-	public void setOccupation(String occupation) {
-		this.occupation = occupation;
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
+
+	public MaritalStatus getMaritalStatus() {
+		return maritalStatus;
+	}
+
+	public void setMaritalStatus(MaritalStatus maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of(new SimpleGrantedAuthority(role.name()));
 	}
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", name=" + name + ", mobileNo=" + mobileNo + ", email="
-				+ email + ", role=" + role + ", isActive=" + isActive + ", password=" + password + ", birthDate="
-				+ birthDate + ", gender=" + gender + ", maritalStatus=" + maritalStatus + ", address=" + address
-				+ ", occupation=" + occupation + ", nationality=" + nationality + "]";
+				+ email + ", password=" + password + ", birthDate=" + birthDate + ", gender=" + gender + ", occupation="
+				+ occupation + ", nationality=" + nationality + ", address=" + address + ", role=" + role
+				+ ", maritalStatus=" + maritalStatus + ", isActive=" + isActive + "]";
 	}
 
 }
