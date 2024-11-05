@@ -11,4 +11,6 @@ import com.insurance.model.User;
 public interface UserRepository extends JpaRepository<User, Serializable> {
 
 	public User findById(Integer id);
+
+	public User findByUsername(String username);
 }

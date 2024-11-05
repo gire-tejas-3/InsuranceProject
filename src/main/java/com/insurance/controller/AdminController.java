@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.insurance.exceptions.ClaimNotFoundException;
-import com.insurance.exceptions.PolicyNotFoundException;
 import com.insurance.model.Claim;
 import com.insurance.model.Policy;
 import com.insurance.model.User;
@@ -66,8 +63,8 @@ public class AdminController {
 		return new ResponseEntity<Policy>(updatedPolicy, HttpStatus.OK);
 	}
 
-	@PutMapping("/policy/status/{id}")
-	public ResponseEntity<Policy> updatePolicyStatus(@PathVariable Integer id, @RequestParam String status)
+	@PutMapping("/policy/{status}/{id}")
+	public ResponseEntity<Policy> updatePolicyStatus(@PathVariable Integer id, @PathVariable String status)
 			throws Exception {
 		Policy updatedPolicy = policyService.updatePolicyStatus(id, status);
 		return new ResponseEntity<Policy>(updatedPolicy, HttpStatus.OK);
