@@ -38,21 +38,16 @@ public class User implements UserDetails {
 	private Integer id;
 
 	@Column(unique = true)
-	@Size(min = 4, max = 12, message = "Please enter a valid username. Username should not be less than 4 and should not be greater than 12 characters.")
 	private String username;
 
-	@Size(min = 4, message = "Please enter a valid name. Name should not be less than 4 characters.")
 	private String name;
 
 	@Size(min = 10, max = 13, message = "Please enter a valid mobile number.")
-	@Pattern(regexp = "^[0-9]{10, 13}$", message = "Mobile Number should contain only digits")
 	private String mobileNo;
 
 	@Column(unique = true)
-	@Email(message = "Please enter a valid email")
 	private String email;
 
-	@Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,16}$", message = "Password must be 8 to 16 characters long, contain at least one digit, one uppercase letter, and one special symbol.")
 	private String password;
 
 	private LocalDate birthDate;

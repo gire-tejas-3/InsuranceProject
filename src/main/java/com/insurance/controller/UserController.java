@@ -11,22 +11,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.insurance.model.Policy;
-import com.insurance.service.ClaimService;
 import com.insurance.service.PolicyService;
-import com.insurance.service.UserService;
 
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
 
 	@Autowired
-	private UserService userService;
-
-	@Autowired
 	private PolicyService policyService;
-
-	@Autowired
-	private ClaimService claimService;
 
 	// Policy
 	@GetMapping("/policies")

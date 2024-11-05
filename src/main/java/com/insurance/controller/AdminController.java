@@ -26,6 +26,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/admin")
 
+
 public class AdminController {
 
 	@Autowired
@@ -39,6 +40,7 @@ public class AdminController {
 
 	// Policy
 	@GetMapping("/policies")
+	
 	public ResponseEntity<List<Policy>> getAllPolicies(@RequestParam(required = false) String status) {
 		List<Policy> policies = policyService.getAllPolicy(status);
 		return new ResponseEntity<List<Policy>>(policies, HttpStatus.OK);

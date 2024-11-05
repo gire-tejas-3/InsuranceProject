@@ -35,11 +35,9 @@ public class Policy {
 	private String type;
 
 	@Enumerated(EnumType.STRING)
-	@Pattern(regexp = "^(ONLINE|OFFLINE|AUTOPAYMENT)$")
 	private PaymentMode paymentMode; // online, offline, auto payment
 
 	@Enumerated(EnumType.STRING)
-	@Pattern(regexp = "^(YEARLY|QUARTERLY|MONTHLY)$")
 	private PayTerm payTerm;
 
 	private double settlementRatio;

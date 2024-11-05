@@ -25,7 +25,9 @@ public class SecurityConfiguration {
 	@Autowired
 	private AuthenticationProvider authenticationProvider;
 
-	public static String[] PUBLIC_URLS = { "/api/v1/auth/*", "/api/v1/auth/register", "/api/v1/auth/login" };
+	// Public URLs that do not require authentication
+	public static String[] PUBLIC_URLS = { "/api/v1/auth/*", "/api/v1/auth/register", "/api/v1/auth/login",
+			"/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/webjars/**" };
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -38,8 +40,9 @@ public class SecurityConfiguration {
 						.logoutUrl("/api/v1/auth/logout").logoutSuccessHandler((req, res, authentication) -> {
 							res.setStatus(HttpStatus.OK.value());
 							res.setContentType("application/json");
-							res.getWriter().write("{\"message\":\"logout successfull\"}");
+							res.getWriter().write("{\"message\":\"logout successful\"}");
 						}).invalidateHttpSession(true).clearAuthentication(true).deleteCookies("JSESSIONID"));
+
 		return http.build();
 	}
 }

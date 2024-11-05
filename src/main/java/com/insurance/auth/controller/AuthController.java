@@ -16,6 +16,7 @@ import com.insurance.auth.utils.AuthResponse;
 import com.insurance.auth.utils.LoginRequest;
 import com.insurance.auth.utils.RegisterRequest;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -27,19 +28,22 @@ public class AuthController {
 	private AuthService authService;
 
 	@PostMapping("/register")
+	@Operation(description = "New User Registration")
 	public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest req) {
 		return new ResponseEntity<AuthResponse>(authService.register(req), HttpStatus.CREATED);
 	}
 
+	@Operation(description = "New User Sign in")
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest req) {
 		return new ResponseEntity<AuthResponse>(authService.login(req), HttpStatus.OK);
 	}
 
 	@PostMapping("/logout")
+	@Operation(description = "Logout User")
 	public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response,
 			@RequestHeader(value = "Authorization", required = false) String header) {
-
+ 
 		var authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		if (authentication != null) {

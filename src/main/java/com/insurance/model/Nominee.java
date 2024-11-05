@@ -27,25 +27,18 @@ public class Nominee {
 	private int id;
 
 	@NotNull
-	@Size(min = 3, message = "Please enter valid name, name must not be less then 3.")
 	private String name;
 
-	@Pattern(regexp = "^(female|male)$", message = "Gender must be either male or female.")
 	private String gender;
 
-	@NotNull(message = "Please enter relationship with the user.")
 	private String relationship;
 
-	@Pattern(regexp = "^[0-9]{10,13}$", message = "Please enter valid mobile number.")
 	private String mobileNo;
 
-	@Email(message = "Please enter the valid email address.")
 	private String email;
 
-	@NotNull(message = "Date of birth is mandatory.")
 	private String dateOfBirth;
 
-	@NotNull(message = "Please enter your address.")
 	@OneToMany(mappedBy = "nominee")
 	@JsonManagedReference
 	private List<Address> address;

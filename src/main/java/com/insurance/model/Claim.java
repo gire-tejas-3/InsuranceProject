@@ -29,21 +29,17 @@ public class Claim {
 	@Lob
 	private String description;
 
-	@NotNull
 	private LocalDate claimDate;
 
 	@Enumerated(EnumType.STRING)
-	@Pattern(regexp = "^(AVAILABLE|INPROCESS|APPROVED|REJECTED)$")
 	private Status status; // Aprroved or Rejected or in process
 
 	private long claimAmount;
 
 	private int gracePeriod; // 30DAYS OR 60 DAYS
 
-	@Pattern(regexp = "^(MATURITY|DEATH)$")
 	private String category; // maturity or death
 
-	@Pattern(regexp = "^(CHEQUE|TRANSFER)$")
 	private String modeOfPayment; // cheque, digital transfer
 
 	private String medicalRecords; // medical bills, hospital bills

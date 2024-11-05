@@ -1,5 +1,7 @@
 package com.insurance.auth.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +20,7 @@ import com.insurance.repository.UserRepository;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+	private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -47,28 +50,31 @@ public class AuthServiceImpl implements AuthService {
 		user.setMaritalStatus(req.getMaritalStatus());
 		user.setRole(req.getRole());
 		user.setActive(true);
+		userRepository.save(user);
 
 		String accessToken = jwtService.generateAccessToken(user);
-		String refreshToken = refreshTokenService.createRefreshToken(req.getUsername()).toString();
+		String refreshToken = refreshTokenService.createRefreshToken(req.getUsername()).getToken();
 
-		userRepository.save(user);
+		logger.info("User Registration Successfull: " + user.getUsername());
 		return new AuthResponse(accessToken, refreshToken);
 	}
 
 	@Override
 	public AuthResponse login(LoginRequest req) {
+		authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword()));
+
 		User user = userRepository.findByUsername(req.getUsername());
 
 		if (user == null) {
+			logger.error("User not Found with username: " + req.getUsername());
 			throw new UserNotFoundException("User not Found with username: " + req.getUsername());
 		}
 
-		authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities()));
-
 		String accessToken = jwtService.generateAccessToken(user);
-		String refreshToken = refreshTokenService.createRefreshToken(user.getUsername()).toString();
-
+		String refreshToken = refreshTokenService.createRefreshToken(user.getUsername()).getToken();
+		logger.info("Access Token" + accessToken);
+		logger.info("Successfully Logged In!");
 		return new AuthResponse(accessToken, refreshToken);
 	}
 }
