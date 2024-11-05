@@ -8,6 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.insurance.auth.model.Refreshtoken;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +21,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
@@ -70,6 +74,10 @@ public class User implements UserDetails {
 
 	private boolean isActive;
 
+	@OneToOne(mappedBy = "user")
+	@JsonManagedReference
+	private Refreshtoken refreshToken;
+
 //	Constructors
 	public User() {
 
@@ -77,7 +85,7 @@ public class User implements UserDetails {
 
 	public User(String username, String name, String mobileNo, String email, String password, LocalDate birthDate,
 			String gender, String occupation, String nationality, List<Address> address, UserRole role,
-			MaritalStatus maritalStatus, boolean isActive) {
+			MaritalStatus maritalStatus, boolean isActive, Refreshtoken refreshToken) {
 		this.username = username;
 		this.name = name;
 		this.mobileNo = mobileNo;
@@ -91,6 +99,7 @@ public class User implements UserDetails {
 		this.role = role;
 		this.maritalStatus = maritalStatus;
 		this.isActive = isActive;
+		this.refreshToken = refreshToken;
 	}
 
 	public Integer getId() {
@@ -203,6 +212,14 @@ public class User implements UserDetails {
 
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public Refreshtoken getRefreshToken() {
+		return refreshToken;
+	}
+
+	public void setRefreshToken(Refreshtoken refreshToken) {
+		this.refreshToken = refreshToken;
 	}
 
 	@Override

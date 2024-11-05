@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.insurance.exceptions.ClaimNotFoundException;
 import com.insurance.exceptions.GlobalErrorResponse;
 import com.insurance.exceptions.PolicyNotFoundException;
+import com.insurance.exceptions.RefreshTokenNotFound;
 import com.insurance.exceptions.UserNotFoundException;
 
 @ControllerAdvice
@@ -31,4 +32,9 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<GlobalErrorResponse>(error, HttpStatus.NOT_FOUND);
 	}
 
+	@ExceptionHandler(RefreshTokenNotFound.class)
+	public ResponseEntity<GlobalErrorResponse> handleRefreshTokenNotFoundException(RefreshTokenNotFound e) {
+		GlobalErrorResponse error = new GlobalErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<GlobalErrorResponse>(error, HttpStatus.NOT_FOUND);
+	}
 }
